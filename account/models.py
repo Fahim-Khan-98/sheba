@@ -26,9 +26,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
  
 
 class Profile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=True, null= True)
+    first_name = models.CharField(max_length=50, blank=True, null= True)
+    last_name = models.CharField(max_length=50, blank=True, null= True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
     def __str__(self):
