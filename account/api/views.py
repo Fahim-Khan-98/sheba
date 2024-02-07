@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from account.models import CustomUser, Profile
 from rest_framework.authtoken.models import Token
 from .serializers import CustomUserSerializer, ProfileSerializer
+# for token authentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 
@@ -25,19 +26,17 @@ class CustomUserListCreateAPIView(APIView):
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
-            # serializer.save()
-            # return Response(serializer.errors, status=status.HTTP_201_CREATED)
-            #  token created
+
+            #  token authentication created
              
             user = serializer.save()
             token_obj, created = Token.objects.get_or_create(user=user)
             if created:
-                # return Response({'payload': serializer.data, 'token': str(token_obj),'status': 200, 'message': 'token created'}, )
                     return Response({'user': serializer.data, 'token': token_obj.key}, status=status.HTTP_201_CREATED)
             else:
                 # Handle case where token cannot be created
                 return Response({'error': 'Token creation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                # return Response({'status': 403,'error': 'Token creation failed', 'token': str(token_obj), 'message': 'token can not created'}, )
+               
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
