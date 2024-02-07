@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from account.models import CustomUser, Profile
-from rest_framework.authtoken.models import Token
 from .serializers import CustomUserSerializer, ProfileSerializer
 # for token authentication
 from rest_framework.permissions import IsAuthenticated
