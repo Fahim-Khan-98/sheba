@@ -24,33 +24,6 @@ class GetRoutes(APIView):
         }
         return Response(context)
 
-
-# class CustomUserListCreateAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     authentication_classes = [TokenAuthentication]
-
-    # def get(self, request):
-    #     users = CustomUser.objects.all()
-    #     serializer = CustomUserSerializer(users, many=True)
-    #     return Response(serializer.data)
-
-#     def post(self, request):
-#         serializer = CustomUserSerializer(data=request.data)
-#         if serializer.is_valid():
-
-#             #  token authentication created
-             
-#             user = serializer.save()
-#             token_obj, created = Token.objects.get_or_create(user=user)
-#             if created:
-#                 return Response(serializer.data,  token_obj.key, status=status.HTTP_201_CREATED)
-#             else:
-#                 # Handle case where token cannot be created
-#                 return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-               
-        
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class CustomUserListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -65,7 +38,11 @@ class CustomUserListCreateAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             token_obj, created = Token.objects.get_or_create(user=user)
-            return Response(status=status.HTTP_201_CREATED)
+            if created:
+                return Response(serializer.data,  token_obj.key, status=status.HTTP_201_CREATED)
+            else:
+                # Handle case where token cannot be created
+                return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomUserRetrieveUpdateAPIView(APIView):
