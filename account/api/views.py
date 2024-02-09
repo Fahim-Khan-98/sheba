@@ -62,7 +62,7 @@ class CustomUserRetrieveUpdateAPIView(APIView):
 
     def put(self, request, pk):
         user = self.get_object(pk)
-        serializer = CustomUserSerializer(user, data=request.data)
+        serializer = CustomUserRegisterSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -105,7 +105,7 @@ class ProfileRetrieveUpdateAPIView(APIView):
         profile = self.get_object(pk)
         serializer = ProfileSerializer(profile, data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
