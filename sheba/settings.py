@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',
+    'event.apps.EventConfig',
     'rest_framework',
     'crispy_forms',
     'rest_framework.authtoken',

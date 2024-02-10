@@ -16,9 +16,18 @@ class GetRoutes(APIView):
         routes = [
             'GET /api/v1/users/',
             'GET /api/v1/users/:id/',
+
             'GET /api/v1/profiles/',
             'GET /api/v1/profiles/:id/',
+
             'GET /api-token-auth/',
+
+            'GET /api/v1/event/',
+            'GET /api/v1/event/:id/',
+            
+            'GET /api/v1/donate/',
+            'GET /api/v1/donate/:id/',
+            
         ]
         context = {
             'routes': routes

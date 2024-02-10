@@ -26,4 +26,10 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Profile)
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'user']
+    list_filter = ['first_name']
+    search_fields = ['first_name']
