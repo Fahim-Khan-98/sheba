@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from account.models import CustomUser, Profile
-from .serializers import CustomUserSerializer, ProfileSerializer
+from .serializers import CustomUserSerializer, ProfileSerializer, CustomUserRegisterSerializer
 # for token authentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
@@ -35,14 +35,13 @@ class CustomUserListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
+        serializer = CustomUserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token_obj, created = Token.objects.get_or_create(user=user)
             if created:
-                return Response(serializer.data,  token_obj.key, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                # Handle case where token cannot be created
                 return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -65,13 +64,8 @@ class CustomUserRetrieveUpdateAPIView(APIView):
         user = self.get_object(pk)
         serializer = CustomUserSerializer(user, data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            token_obj, created = Token.objects.get_or_create(user=user)
-            if created:
-                    return Response(serializer.data,  token_obj.key, status=status.HTTP_201_CREATED)
-            else:
-                # Handle case where token cannot be created
-                return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -87,9 +81,8 @@ class ProfileListCreateAPIView(APIView):
     def post(self, request):
         serializer = ProfileSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            token_obj, created = Token.objects.get_or_create(user=user)
-            return Response(status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -113,11 +106,6 @@ class ProfileRetrieveUpdateAPIView(APIView):
         serializer = ProfileSerializer(profile, data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token_obj, created = Token.objects.get_or_create(user=user)
-            if created:
-                    return Response(serializer.data,  token_obj.key, status=status.HTTP_201_CREATED)
-            else:
-                # Handle case where token cannot be created
-                return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

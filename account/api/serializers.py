@@ -6,6 +6,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['id', 'user', 'first_name', 'last_name', 'avatar']
 
+class CustomUserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'crimesection_admin', 'entertainment_admin', 'phone', 'is_active', 'is_staff']
+
+        
+
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
 
